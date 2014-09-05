@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/maruel/subcommands"
+	"net/url"
 	"os"
 	"sort"
 	"strings"
@@ -23,11 +24,33 @@ func (c *CommonFlags) Init() {
 	c.Flags.StringVar(&c.ServerURL, "server", os.Getenv("SWARMING_SERVER"), "Server URL; required. Set $SWARMING_SERVER to set a default.")
 }
 
+// Ensures the url is https://.
+func urlToHTTPS(s string) (string, error) {
+	u, err := url.Parse(s)
+	if err != nil {
+		return "", err
+	}
+	if u.Scheme != "" && u.Scheme != "https" {
+		return "", errors.New("Only https:// scheme is accepted. It can be omitted.")
+	}
+	if !strings.HasPrefix(s, "https://") {
+		s = "https://" + s
+	}
+	if _, err = url.Parse(s); err != nil {
+		return "", err
+	}
+	return s, nil
+}
+
 func (c *CommonFlags) Parse(d SwarmingApplication) error {
 	if c.ServerURL == "" {
 		return errors.New("Must provide -server")
 	}
-	// TODO(maruel): Enforce ServerURL is an URL, prefix https:// automatically.
+	s, err := urlToHTTPS(c.ServerURL)
+	if err != nil {
+		return err
+	}
+	c.ServerURL = s
 	return nil
 }
 
