@@ -25,7 +25,8 @@ func init() {
 	InterruptedChannel = c
 }
 
-// Initialize an handler to handle SIGINT, which is normally sent on Ctrl-C.
+// HandleCtrlC initializes an handler to handle SIGINT, which is normally sent
+// on Ctrl-C.
 func HandleCtrlC() {
 	chanSignal := make(chan os.Signal)
 
@@ -37,8 +38,8 @@ func HandleCtrlC() {
 	signal.Notify(chanSignal, os.Interrupt)
 }
 
-// Simulates an interrupt signal. Can be used to stop background processing
-// when an error occured and the process should terminates cleanly.
+// Interrupt simulates an interrupt signal. Can be used to stop background
+// processing when an error occured and the process should terminates cleanly.
 func Interrupt() {
 	atomic.StoreInt32(&interrupted, 1)
 	go func() {
@@ -48,7 +49,7 @@ func Interrupt() {
 	}()
 }
 
-// Returns true once an interrupt signal was received.
+// IsInterrupted returns true once an interrupt signal was received.
 func IsInterrupted() bool {
 	return atomic.LoadInt32(&interrupted) != 0
 }

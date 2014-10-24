@@ -6,6 +6,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/maruel/subcommands"
 )
 
@@ -22,8 +23,8 @@ var cmdRun = &subcommands.Command{
 }
 
 type runRun struct {
-	CommonFlags
-	dimensions DoubleVar
+	commonFlags
+	dimensions doubleVar
 }
 
 func (c *runRun) main(a SwarmingApplication, args []string) error {

@@ -6,6 +6,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/maruel/subcommands"
 )
 
@@ -22,12 +23,12 @@ var cmdCollect = &subcommands.Command{
 }
 
 type collectRun struct {
-	CommonFlags
+	commonFlags
 	metaData   bool
-	dimensions DoubleVar
+	dimensions doubleVar
 }
 
-func (c *collectRun) main(a SwarmingApplication, task_id string) error {
+func (c *collectRun) main(a SwarmingApplication, taskID string) error {
 	if err := c.Parse(a); err != nil {
 		return err
 	}

@@ -6,6 +6,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/maruel/subcommands"
 )
 
@@ -22,8 +23,8 @@ var cmdTrigger = &subcommands.Command{
 }
 
 type triggerRun struct {
-	CommonFlags
-	dimensions DoubleVar
+	commonFlags
+	dimensions doubleVar
 }
 
 func (c *triggerRun) main(a SwarmingApplication, args []string) error {

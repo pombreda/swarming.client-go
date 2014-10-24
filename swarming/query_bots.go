@@ -6,6 +6,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/maruel/subcommands"
 )
 
@@ -23,9 +24,9 @@ var cmdQueryBots = &subcommands.Command{
 }
 
 type queryBotsRun struct {
-	CommonFlags
+	commonFlags
 	bare       bool
-	dimensions DoubleVar
+	dimensions doubleVar
 }
 
 func (c *queryBotsRun) main(a queryApplication) error {

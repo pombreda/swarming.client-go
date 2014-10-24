@@ -6,6 +6,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/maruel/subcommands"
 )
 
@@ -22,7 +23,7 @@ var cmdQueryStartSlave = &subcommands.Command{
 }
 
 type queryStartSlaveRun struct {
-	CommonFlags
+	commonFlags
 	file string
 }
 

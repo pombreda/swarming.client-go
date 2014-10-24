@@ -6,6 +6,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/maruel/subcommands"
 )
 
@@ -21,7 +22,7 @@ var cmdQuery = &subcommands.Command{
 }
 
 type queryRun struct {
-	CommonFlags
+	commonFlags
 }
 
 func (c *queryRun) main(a SwarmingApplication, args []string) error {

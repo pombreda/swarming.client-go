@@ -8,10 +8,11 @@
 package main
 
 import (
-	"github.com/maruel/subcommands"
-	"github.com/maruel/subcommands/subcommandstest"
 	"log"
 	"os"
+
+	"github.com/maruel/subcommands"
+	"github.com/maruel/subcommands/subcommandstest"
 )
 
 var application = &subcommands.DefaultApplication{
@@ -27,6 +28,7 @@ var application = &subcommands.DefaultApplication{
 	},
 }
 
+// SwarmingApplication is the app.
 type SwarmingApplication interface {
 	subcommandstest.Application
 }

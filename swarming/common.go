@@ -7,24 +7,25 @@ package main
 import (
 	"errors"
 	"fmt"
-	"github.com/maruel/subcommands"
 	"net/url"
 	"os"
 	"sort"
 	"strings"
+
+	"github.com/maruel/subcommands"
 )
 
-// Common flags.
-type CommonFlags struct {
+type commonFlags struct {
 	subcommands.CommandRunBase
 	ServerURL string
 }
 
-func (c *CommonFlags) Init() {
+// Init initializes common flags.
+func (c *commonFlags) Init() {
 	c.Flags.StringVar(&c.ServerURL, "server", os.Getenv("SWARMING_SERVER"), "Server URL; required. Set $SWARMING_SERVER to set a default.")
 }
 
-// Ensures the url is https://.
+// urlToHTTPS ensures the url is https://.
 func urlToHTTPS(s string) (string, error) {
 	u, err := url.Parse(s)
 	if err != nil {
@@ -42,7 +43,8 @@ func urlToHTTPS(s string) (string, error) {
 	return s, nil
 }
 
-func (c *CommonFlags) Parse(d SwarmingApplication) error {
+// Parse parses the common flags.
+func (c *commonFlags) Parse(d SwarmingApplication) error {
 	if c.ServerURL == "" {
 		return errors.New("Must provide -server")
 	}
@@ -54,11 +56,11 @@ func (c *CommonFlags) Parse(d SwarmingApplication) error {
 	return nil
 }
 
-type DoubleVar struct {
+type doubleVar struct {
 	Items map[string]string
 }
 
-func (d *DoubleVar) String() string {
+func (d *doubleVar) String() string {
 	out := make([]string, 0, len(d.Items))
 	for k, v := range d.Items {
 		out = append(out, fmt.Sprintf("%s=%s", k, v))
@@ -67,7 +69,7 @@ func (d *DoubleVar) String() string {
 	return strings.Join(out, ", ")
 }
 
-func (d *DoubleVar) Set(s string) error {
+func (d *doubleVar) Set(s string) error {
 	out := strings.SplitN(s, "=", 1)
 	if len(out) != 2 {
 		return errors.New("Must use foo=bar format")
