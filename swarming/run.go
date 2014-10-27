@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	"github.com/maruel/subcommands"
+	"github.com/maruel/swarming.client-go/pkg/common"
 )
 
 var cmdRun = &subcommands.Command{
@@ -36,7 +37,7 @@ func (c *runRun) main(a SwarmingApplication, args []string) error {
 }
 
 func (c *runRun) Run(a subcommands.Application, args []string) int {
-	HandleCtrlC()
+	common.HandleCtrlC()
 	d := a.(SwarmingApplication)
 	if err := c.main(d, args); err != nil {
 		fmt.Fprintf(a.GetErr(), "%s: %s\n", a.GetName(), err)

@@ -36,13 +36,14 @@ func NewSwarming(host string, c *common.Cache) (*Swarming, error) {
 }
 
 // RequestByID returns the TaskRequest.
-func (s *Swarming) RequestByID(id string) (TaskRequest, error) {
+func (s *Swarming) RequestByID(id TaskID) (TaskRequest, error) {
 	out := TaskRequest{}
-	err := s.getJSON("/swarming/api/v1/client/task/"+id+"/request", &out)
+	err := s.getJSON("/swarming/api/v1/client/task/"+string(id)+"/request", &out)
 	return out, err
 }
 
-// TasksByTag returns the results corresponding to a tag.
+// TasksByTag returns the results corresponding to a tag. The function returns
+// once all the tasks have been pushed to |out|.
 func (s *Swarming) TasksByTag(out chan<- TaskResult, tags ...string) error {
 	// TODO(maruel): Cursor support.
 	u := "/swarming/api/v1/client/tasks?limit=500"
@@ -59,9 +60,12 @@ func (s *Swarming) TasksByTag(out chan<- TaskResult, tags ...string) error {
 			wg.Add(1)
 			go func(item TaskResult) {
 				defer wg.Done()
-				item.TaskRequest, err = s.RequestByID(item.ID)
-				if err == nil {
+				var err2 error
+				item.TaskRequest, err2 = s.RequestByID(item.ID)
+				if err2 == nil {
 					out <- item
+				} else {
+					err = err2
 				}
 			}(item)
 		}
@@ -69,6 +73,8 @@ func (s *Swarming) TasksByTag(out chan<- TaskResult, tags ...string) error {
 	}
 	return err
 }
+
+type TaskID string
 
 // TaskRequestProperties describes the idempotent properties of a task.
 type TaskRequestProperties struct {
@@ -105,7 +111,7 @@ type TaskResult struct {
 	Durations       []float64 `json:"durations"`
 	ExitCodes       []int     `json:"exit_codes"`
 	Failure         bool      `json:"failure"`
-	ID              string    `json:"id"`
+	ID              TaskID    `json:"id"`
 	InternalFailure bool      `json:"internal_failure"`
 	//"modified_ts": "2014-10-24 00:00:00",
 	Name           string   `json:"name"`
