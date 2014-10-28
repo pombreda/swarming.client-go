@@ -7,7 +7,6 @@ package common
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 
@@ -73,7 +72,6 @@ func GetJSON(c *http.Client, URL string, v interface{}) error {
 	if c == nil {
 		c = http.DefaultClient
 	}
-	log.Printf("GET %s", URL)
 	resp, err := c.Get(URL)
 	if err != nil {
 		return fmt.Errorf("Couldn't resolve %s: %s", URL, err)
