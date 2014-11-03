@@ -28,7 +28,7 @@ func LoadCache(path string) *Cache {
 	// Load the file. Can't use ~/.isolated_oauth because it's too different.
 	o := &Cache{path: path}
 	if path != "" {
-		readJSONFile(path, &o.data)
+		_ = readJSONFile(path, &o.data)
 	}
 	if o.data.Apps == nil {
 		o.data.Apps = make(map[string]ofh.InstalledApp)
@@ -39,7 +39,7 @@ func LoadCache(path string) *Cache {
 // Save saves the cache back to disk.
 func (c *Cache) Save() {
 	if c.path != "" {
-		writeJSONFile(c.path, c.data)
+		_ = writeJSONFile(c.path, c.data)
 	}
 }
 
@@ -79,7 +79,9 @@ func GetJSON(c *http.Client, URL string, v interface{}) error {
 	if resp.StatusCode != 200 {
 		return fmt.Errorf("HTTP Status %d", resp.StatusCode)
 	}
-	defer resp.Body.Close()
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 	decoder := json.NewDecoder(resp.Body)
 	if err := decoder.Decode(v); err != nil {
 		return fmt.Errorf("Unexected response %s: %s", URL, err)
