@@ -7,8 +7,8 @@ package main
 import (
 	"fmt"
 
+	"github.com/maruel/interrupt"
 	"github.com/maruel/subcommands"
-	"github.com/maruel/swarming.client-go/pkg/common"
 )
 
 var cmdCollect = &subcommands.Command{
@@ -42,7 +42,7 @@ func (c *collectRun) Run(a subcommands.Application, args []string) int {
 		fmt.Fprintf(a.GetErr(), "%s: Must only provide a task id.\n", a.GetName())
 		return 1
 	}
-	common.HandleCtrlC()
+	interrupt.HandleCtrlC()
 	d := a.(SwarmingApplication)
 	if err := c.main(d, args[0]); err != nil {
 		fmt.Fprintf(a.GetErr(), "%s: %s\n", a.GetName(), err)

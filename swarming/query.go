@@ -7,8 +7,8 @@ package main
 import (
 	"fmt"
 
+	"github.com/maruel/interrupt"
 	"github.com/maruel/subcommands"
-	"github.com/maruel/swarming.client-go/pkg/common"
 )
 
 var cmdQuery = &subcommands.Command{
@@ -53,7 +53,7 @@ func (q queryApplication) GetCommands() []*subcommands.Command {
 }
 
 func (c *queryRun) Run(a subcommands.Application, args []string) int {
-	common.HandleCtrlC()
+	interrupt.HandleCtrlC()
 	d := a.(SwarmingApplication)
 	// Create an inner application.
 	return subcommands.Run(queryApplication{d}, args)

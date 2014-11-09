@@ -7,8 +7,8 @@ package main
 import (
 	"fmt"
 
+	"github.com/maruel/interrupt"
 	"github.com/maruel/subcommands"
-	"github.com/maruel/swarming.client-go/pkg/common"
 )
 
 var cmdTrigger = &subcommands.Command{
@@ -37,7 +37,7 @@ func (c *triggerRun) main(a SwarmingApplication, args []string) error {
 }
 
 func (c *triggerRun) Run(a subcommands.Application, args []string) int {
-	common.HandleCtrlC()
+	interrupt.HandleCtrlC()
 	d := a.(SwarmingApplication)
 	if err := c.main(d, args); err != nil {
 		fmt.Fprintf(a.GetErr(), "%s: %s\n", a.GetName(), err)

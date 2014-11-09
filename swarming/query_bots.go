@@ -7,8 +7,8 @@ package main
 import (
 	"fmt"
 
+	"github.com/maruel/interrupt"
 	"github.com/maruel/subcommands"
-	"github.com/maruel/swarming.client-go/pkg/common"
 )
 
 var cmdQueryBots = &subcommands.Command{
@@ -43,7 +43,7 @@ func (c *queryBotsRun) Run(a subcommands.Application, args []string) int {
 		fmt.Fprintf(a.GetErr(), "%s: Unknown arguments.\n", a.GetName())
 		return 1
 	}
-	common.HandleCtrlC()
+	interrupt.HandleCtrlC()
 	d := a.(queryApplication)
 	if err := c.main(d); err != nil {
 		fmt.Fprintf(a.GetErr(), "%s: %s\n", a.GetName(), err)
